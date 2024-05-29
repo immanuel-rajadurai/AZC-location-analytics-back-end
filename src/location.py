@@ -7,7 +7,23 @@ class Location:
     
     The class should have appropriate constructor, getters and setters     
     """
-    def __init__(self):
-        pass
+    def __init__(self,longitude,latitude):
+        self.longitude = longitude
+        self.latitude = latitude
+
+    def set_longitude(self,longitude):
+        self.longitude = longitude
+
+    def get_longitude(self):
+        return self.longitude
+
+    def set_latitude(self,latitude):
+        self.latitude = latitude
+
+    def get_latitude(self):
+        return self.latitude
+
+   
+        
 
 
