@@ -12,7 +12,6 @@ def check_location_is_on_edge(point: Tuple[int, int], edge: Tuple[Tuple[int, int
     (x,y) = point
     (x1, y1), (x2, y2) = edge
 
-
     #Check if the point is co-linear with the edge
     if (x2-x1) * (y-y1) != (y2-y1) * (x-x1):
         return False
