@@ -20,7 +20,7 @@ from location import Location
 
 class Area:
 
-  def __init__(self,name,geofence): # geofence is a list of location objects
+  def __init__(self,name,geofence: list[Location]): # geofence is a list of location objects
     self.name = name
     self.geofence = geofence
 

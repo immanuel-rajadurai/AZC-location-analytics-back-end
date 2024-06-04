@@ -11,38 +11,46 @@ check_location_is_within_area runs in O(n) time, and passes 6/6 test cases
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 from utils import check_location_is_within_area
+from location import Location
+from area import Area
 
 class TestRayCasting(unittest.TestCase):
     # General test cases
     def testPointInsideArea(self):
-        location = (0.5, 0.5)
-        area = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        location = Location(0.5, 0.5)
+        a1 = Area("Test Area", [Location(0, 0), Location(1, 0), Location(1, 1), Location(0, 1)])
+        area = a1.get_geofence()
         self.assertTrue(check_location_is_within_area(location, area))
 
     def testPointOutsideArea(self):
-        location = (1.5, 1.5)
-        area = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        location = Location(1.5, 1.5)
+        a1 = Area("Test Area", [Location(0, 0), Location(1, 0), Location(1, 1), Location(0, 1)])
+        area = a1.get_geofence()
         self.assertFalse(check_location_is_within_area(location, area))
 
     def testPointInsideAreaComplexPolygon(self):
-        location = (2, 2)
-        area = [(0, 0), (4, 0), (4, 4), (2, 6), (0, 4)]
+        location = Location(2, 2)
+        a1 = Area("Complex Area", [Location(0, 0), Location(4, 0), Location(4, 4), Location(2, 6), Location(0, 4)])
+        area = a1.get_geofence()
         self.assertTrue(check_location_is_within_area(location, area))
 
     def testPointOutsideAreaComplexPolygon(self):
-        location = (5, 5)
-        area = [(0, 0), (4, 0), (4, 4), (2, 6), (0, 4)]
+        location = Location(5, 5)
+        a1 = Area("Complex Area", [Location(0, 0), Location(4, 0), Location(4, 4), Location(2, 6), Location(0, 4)])
+        area = a1.get_geofence()
         self.assertFalse(check_location_is_within_area(location, area))
 
     # Edge test cases
     def testPointOnEdge(self):
-        location = (0.5, 0)
-        area = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        location = Location(0.5, 0)
+        a1 = Area("Test Area", [Location(0, 0), Location(1, 0), Location(1, 1), Location(0, 1)])
+        area = a1.get_geofence()
         self.assertTrue(check_location_is_within_area(location, area))
 
     def testPointOnEdgeComplexPolygon(self):
-        location = (2, 0)
-        area = [(0, 0), (4, 0), (4, 4), (2, 6), (0, 4)]
+        location = Location(2, 0)
+        a1 = Area("Complex Area", [Location(0, 0), Location(4, 0), Location(4, 4), Location(2, 6), Location(0, 4)])
+        area = a1.get_geofence()
         self.assertTrue(check_location_is_within_area(location, area))
 
 if __name__ == '__main__':

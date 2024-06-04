@@ -1,5 +1,7 @@
 from typing import List, Tuple
 from scipy.spatial import ConvexHull
+from location import Location
+
 
 """
 Determines whether a location (in form of a tuple coordinates (longitude, latitude)) 
@@ -8,9 +10,11 @@ Computes the Convex hull to ensure that the area polygon forms a closed perimete
 Runs within O(n) time, where n is the number of edges
 """
 
-def check_location_is_on_edge(point: Tuple[int, int], edge: Tuple[Tuple[int, int]]):
-    (x,y) = point
-    (x1, y1), (x2, y2) = edge
+def check_location_is_on_edge(point: Location, edge: Tuple[Location, Location]) -> bool:
+    x, y = point.get_longitude(), point.get_latitude()
+    p1, p2 = edge
+    x1, y1 = p1.get_longitude(), p1.get_latitude()
+    x2, y2 = p2.get_longitude(), p2.get_latitude()
 
     #Check if the point is co-linear with the edge
     if (x2-x1) * (y-y1) != (y2-y1) * (x-x1):
@@ -18,19 +22,20 @@ def check_location_is_on_edge(point: Tuple[int, int], edge: Tuple[Tuple[int, int
     
     #Check if the point is between the points
     if min(x1, x2) <= x <= max(x1, x2) and min(y1, y2) <= y <= max(y1,y2):
-        return True
+        return True 
     else:
         return False
 
 
-def check_location_is_within_area(location: Tuple[int, int], area:List[Tuple[int,int]]):
-    xp = location[0]
-    yp = location[1]
+def check_location_is_within_area(location: Location, area:List[Location]):
+    xp, yp = location.get_longitude(), location.get_latitude()
 
+    points = [(loc.get_longitude(), loc.get_latitude()) for loc in area]
 
     #Calculate the Convex hull to ensure a complete perimeter
-    hull = ConvexHull(area)
-    vertices = [area[vertex] for vertex in hull.vertices]
+    hull = ConvexHull(points)
+
+    vertices = [points[vertex] for vertex in hull.vertices]
     vertices.append(vertices[0])
     edges = [(vertices[i], vertices[i+1]) for i in range(len(vertices)-1)]
 
@@ -38,7 +43,7 @@ def check_location_is_within_area(location: Tuple[int, int], area:List[Tuple[int
 
     for edge in edges:
         #If the point is on the edge, it is immediately in the area
-        if (check_location_is_on_edge(location, edge)):
+        if check_location_is_on_edge(location, (Location(*edge[0]), Location(*edge[1]))):
             return True
         
         (x1, y1), (x2, y2) = edge
