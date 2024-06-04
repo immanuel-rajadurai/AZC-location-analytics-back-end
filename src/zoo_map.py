@@ -18,13 +18,15 @@ class ZooMap:
     def display_info(self):
         # Method to display the information
         formatted_visitors = "{:,}".format(self.average_visitors_per_year)  # Format number with commas
-        print(f"Name of the zoo: {self.name}")
-        print(f"Country: {self.country}")
-        print(f"City: {self.city}")
-        print(f"Average number of visitors per year: {formatted_visitors}")
+        return (
+            f"Name of the zoo: {self.name}\n"
+            f"Country: {self.country}\n"
+            f"City: {self.city}\n"
+            f"Average number of visitors per year: {formatted_visitors}\n"
+        )
 
 # Example
 if __name__ == "__main__":
     # Create an instance of ZooMap
     zoo1 = ZooMap("London Zoo", "United Kingdom", "London", 1_300_000)
-    zoo1.display_info()
+    print(zoo1.display_info())
