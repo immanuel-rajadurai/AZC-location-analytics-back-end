@@ -24,7 +24,7 @@ class TestZooMap(unittest.TestCase):
                 "Name of the zoo: London Zoo\n"
                 "Country: United Kingdom\n"
                 "City: London\n"
-                "Average visitors per year: 1_300_000\n"
+                "Average number of visitors per year: 1,300,000\n"
         )
         self.assertEqual(self.zoo.display_info(), expected_output)
 
@@ -35,9 +35,9 @@ class TestZooMap(unittest.TestCase):
             "Name of the zoo: Jardin Zoologique National de Rabat\n"
             "Country: Morocco\n"
             "City: Rabat\n"
-            "Average visitors per year: 1_000_000\n"
+            "Average number of visitors per year: 1,000,000\n"
         )
-        self.assertEqual(self.zoo2.display_info(), expected_output)
+        self.assertEqual(zoo2.display_info(), expected_output)
 
 
 if __name__ == '__main__':

@@ -32,12 +32,12 @@ class TestLocation(unittest.TestCase):
     def test_set_latitude(self):
         # Test setting a new latitude value
         self.location.set_latitude(50)
-        self.assertEqual(self.location.get_longitude(),50)
+        self.assertEqual(self.location.get_latitude(),50)
 
     def test_get_latitude(self):
         # Test getting the updated latitude value
         self.location.set_latitude(55)
-        self.assertEqual(self.location.get_longitude(),55)
+        self.assertEqual(self.location.get_latitude(),55)
 
     def test_location(self):
         # Test setting both longitude and latitude, and then getting their values

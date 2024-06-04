@@ -1,6 +1,6 @@
 import unittest
-from location import Location
-from area import Area, Restaurant, Exhibit
+from src.location import Location
+from src.area import Area, Restaurant, Exhibit
 
 """
 This file contains test cases for the Area, Restaurant, and Exhibit classes.
