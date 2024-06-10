@@ -16,7 +16,7 @@ that you feel is relevant
 
 """
 
-from location import Location
+from src.location import Location
 
 class Area:
 
@@ -74,7 +74,7 @@ class Exhibit(Area):
     self.is_open = False
 
   def is_exhibit_open(self): # informs whether the exhibit is open or not
-    return self.open
+    return self.is_open
                   
   
   
