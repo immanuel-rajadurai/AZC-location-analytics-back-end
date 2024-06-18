@@ -75,6 +75,22 @@ class Exhibit(Area):
 
   def is_exhibit_open(self): # informs whether the exhibit is open or not
     return self.is_open
+
+
+class Entry(Area):
+
+  def __init__(self,name,geofence,is_open):
+    super().__init__(name,geofence)
+    self.is_open = is_open
+
+  def open_entry(self): # opens an entry
+    self.is_open = True
+
+  def closed_entry(self): # closes an entry
+    self.is_open = False
+
+  def is_entry_open(self): # informs whether the entry is open or not
+    return self.is_open
                   
   
   
