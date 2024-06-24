@@ -16,18 +16,16 @@ def simulate(areas: List[Area], gridSize: int, noSteps: int, boundaryPath: List[
     """
 
     # Generate the random walk path
+
     path = generate_random_walk_within_boundary(gridSize, noSteps, boundaryPath)
 
     visitedAreas: List[Area] = []
-    visitedAreaNames = set()  # To keep track of area names
 
     for loc in path:
         for area in areas:
             if check_location_is_within_area(loc, area):
-                area_name = area.get_name()
-                # Avoid adding the same area multiple times
-                if area_name not in visitedAreaNames:
+                if not visitedAreas or visitedAreas[-1].get_name() != area.get_name():
                     visitedAreas.append(area)
-                    visitedAreaNames.add(area_name)
 
     return visitedAreas
+  
