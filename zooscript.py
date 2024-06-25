@@ -77,7 +77,7 @@ areas = [
         Location(60, 60), Location(65, 62), Location(63, 68), Location(58, 67), Location(57, 63)],
         "Snake", True),
     Restaurant("La Brasserie", [
-        Location(70, 50), Location(80, 50), Location(80, 60), Location(70, 60)],
+        Location(10, 10), Location(20, 10), Location(20, 20), Location(10, 20)],
         "Takeaway")
 ]
 
