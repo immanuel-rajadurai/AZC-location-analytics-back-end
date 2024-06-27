@@ -32,6 +32,9 @@ class Area:
 
   def get_geofence(self):
     return self.geofence
+  
+  def get_name(self):
+    return self.name
 
 
 class Restaurant(Area):
