@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>London Zoo Map</title>
+  <link href='https://unpkg.com/maplibre-gl@2.1.9/dist/maplibre-gl.css' rel='stylesheet' />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    .layer-control {
+      position: absolute;
+      right: 53px;
+      bottom: 30px;
+      max-width: 400px;
+      padding: 8px;
+      border-radius: 5px;
+      box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      z-index: 2;
+    }
+    .map-style {
+      width: 48px;
+      height: 60px;
+      border-radius: 10px;
+      margin: 5px;
+    }
+    .map-style:hover {
+      cursor: pointer;
+    }
+    .map-style img {
+      border-radius: 10px;
+    }
+    .map-style .text {
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+      color: #333;
+      margin: 2px;
+      text-align: center;
+    }
+  </style>
+  <script src='https://unpkg.com/maplibre-gl@2.1.9/dist/maplibre-gl.js'></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1145.0.min.js"></script>
+  <script src="https://unpkg.com/@aws-amplify/core@4.5.6/dist/aws-amplify-core.min.js"></script>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="layer-control">
+    <div class="map-style esri-navigation">
+      <img src="esri-navigation.png" alt="Esri Navigation" style="width:100%">
+      <div class="text">Street</div>
+    </div>
+    <div class="map-style here-explore-truck">
+      <img src="here-explore-truck.png" alt="HERE Explore Truck" style="width:100%">
+      <div class="text">Truck</div>
+    </div>
+    <div class="map-style here-berlin">
+      <img src="here-berlin.png" alt="HERE Berlin" style="width:100%">
+      <div class="text">3D</div>
+    </div>
+    <div class="map-style esri-light-gray-canvas">
+      <img src="esri-light-gray-canvas.png" alt="Esri Light Gray Canvas" style="width:100%">
+      <div class="text">Light</div>
+    </div>
+    <div class="map-style esri-imagery">
+      <img src="esri-imagery.png" alt="Esri Imagery" style="width:100%">
+      <div class="text">Satellite</div>
+    </div>
+  </div>
+
+  <script>
+    const identityPoolId = "us-east-1:aba7b90b-4f27-4602-acfe-0f7d0dde8c43";
+
+    AWS.config.region = identityPoolId.split(":")[0];
+    const credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: identityPoolId,
+    });
+
+    async function refreshCredentials() {
+      await credentials.getPromise();
+      setTimeout(refreshCredentials, credentials.expireTime - Date.now() - 60000);
+    }
+
+    const { Signer } = window.aws_amplify_core;
+
+    function transformRequest(url, resourceType) {
+      if (resourceType === "Style" && !url.includes("://")) {
+        url = `https://maps.geo.${AWS.config.region}.amazonaws.com/maps/v0/maps/${url}/style-descriptor`;
+      }
+
+      if (url.includes("amazonaws.com")) {
+        return {
+          url: Signer.signUrl(url, {
+            access_key: credentials.accessKeyId,
+            secret_key: credentials.secretAccessKey,
+            session_token: credentials.sessionToken,
+          }),
+        };
+      }
+
+      return { url };
+    }
+
+    async function initializeApp() {
+      await refreshCredentials();
+
+      const map = new maplibregl.Map({
+        container: "map",
+        center: [-0.1536, 51.5353], 
+        zoom: 16,
+        style: "https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/esri-navigation/style-descriptor",
+        hash: true,
+        transformRequest,
+        maxBounds: [
+          [-0.180, 51.525], 
+          [-0.125, 51.545]  
+        ],
+        minZoom: 12,
+        maxZoom: 20
+      });
+
+      map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+
+      const popup = new maplibregl.Popup({ offset: 35 }).setHTML(
+        `<h3>London Zoo</h3>
+        <p>Regent's Park, London NW1 4RY, UK</p>
+        <img src="entrance-to-zsl-london-zoo-regents-park-city-of-westminster-greater-london-england-united-kingdom-2G54PE3.jpg" width="200" />`
+      );
+
+      const marker = new maplibregl.Marker()
+        .setLngLat([-0.1536, 51.5353])
+        .setPopup(popup)
+        .addTo(map);
+
+      document.querySelector(".map-style.esri-navigation")
+        .addEventListener("click", function (event) {
+          map.setStyle("https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/esri-navigation/style-descriptor");
+        });
+      document.querySelector(".map-style.here-explore-truck")
+        .addEventListener("click", function (event) {
+          map.setStyle("https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/here-explore-truck/style-descriptor");
+        });
+      document.querySelector(".map-style.here-berlin")
+        .addEventListener("click", function (event) {
+          map.setStyle("https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/here-berlin/style-descriptor");
+        });
+      document.querySelector(".map-style.esri-light-gray-canvas")
+        .addEventListener("click", function (event) {
+          map.setStyle("https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/esri-light-gray-canvas/style-descriptor");
+        });
+      document.querySelector(".map-style.esri-imagery")
+        .addEventListener("click", function (event) {
+          map.setStyle("https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/esri-imagery/style-descriptor");
+        });
+    }
+
+    initializeApp();
+  </script>
+</body>
+</html>
