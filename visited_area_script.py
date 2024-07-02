@@ -10,7 +10,7 @@ def determine_visited_area(path: List[Tuple[int, int]], areas: List[Area]) -> Li
 
     # Iterate over each coordinate in the path
     for (longitude, latitude) in path:
-        location = (longitude, latitude) # Current location as a tuple (longitude, latitude)
+        location = (longitude, latitude)  # Current location as a tuple (longitude, latitude)
 
         # Iterate over each area in the list of areas
         for area in areas:
@@ -25,4 +25,4 @@ def determine_visited_area(path: List[Tuple[int, int]], areas: List[Area]) -> Li
                     last_visited_area = area.name
                 break
 
-    return list(visited_areas)
+    return visited_areas

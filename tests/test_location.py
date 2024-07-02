@@ -1,5 +1,5 @@
 import unittest
-from location import Location
+from src.location import Location
 
 """""
 This file contains test cases for the Location class.

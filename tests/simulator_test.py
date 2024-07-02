@@ -1,5 +1,5 @@
-from simulator import Location,Area
-from area import Exhibit,Restaurant
+from src.location import Location
+from src.area import Area, Exhibit, Restaurant
 import unittest
 
 class TestLocation(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestArea(unittest.TestCase):
         loc1 = Location(10.0, 20.0)
         loc2 = Location(15.0, 25.0)
         area = Area("TestArea", [loc1, loc2])
-        self.assertEqual(area.name, "Zoo1")
+        self.assertEqual(area.name, "TestArea")
         self.assertEqual(area.get_geofence(), [loc1, loc2])
 
     def test_add_location(self):
@@ -73,7 +73,7 @@ class TestExhibit(unittest.TestCase):
         exhibit = Exhibit("TestExhibit", [loc1], "Lion", False)
         exhibit.open_exhibit()
         self.assertTrue(exhibit.is_exhibit_open())
-        exhibit.close_exhibit()
+        exhibit.closed_exhibit()
         self.assertFalse(exhibit.is_exhibit_open())
 
 if __name__ == '__main__':
