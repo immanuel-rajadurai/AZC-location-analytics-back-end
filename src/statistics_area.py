@@ -69,10 +69,14 @@ class StatisticsArea:
         return [item.name for item in self.all_areas if isinstance(item, Exhibit) and item.name not in revisited_exhibits]
 
     def get_all_exhibits(self):
+        print("all areas: ", self.all_areas)
+        print("areas 2: ", self.all_areas[1])
         all_exhibits = []
         for area in self.all_areas:
             if isinstance(area, Exhibit):
                 all_exhibits.append(area)
+            else:
+                print("not instance")
         return all_exhibits
 
     def closest_skipped_exhibits(self):

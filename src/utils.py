@@ -1,6 +1,6 @@
 from typing import List, Tuple
 from scipy.spatial import ConvexHull
-from location import Location
+from src.location import Location
 
 
 """
@@ -27,12 +27,12 @@ def check_location_is_on_edge(point: Location, edge: Tuple[Location, Location]) 
         return False
 
 
-def check_location_is_within_area(location: Location, area:List[Location]):
-    xp, yp = location.get_longitude(), location.get_latitude()
+def check_location_is_within_area(location: Tuple[float, float], area: List[Tuple[float, float]]) -> bool:
+    xp, yp = location
 
-    points = [(loc.get_longitude(), loc.get_latitude()) for loc in area]
+    points = area
 
-    #Calculate the Convex hull to ensure a complete perimeter
+    # Calculate the Convex hull to ensure a complete perimeter
     hull = ConvexHull(points)
 
     vertices = [points[vertex] for vertex in hull.vertices]
@@ -42,14 +42,11 @@ def check_location_is_within_area(location: Location, area:List[Location]):
     counter = 0
 
     for edge in edges:
-        #If the point is on the edge, it is immediately in the area
-        if check_location_is_on_edge(location, (Location(*edge[0]), Location(*edge[1]))):
-            return True
-        
         (x1, y1), (x2, y2) = edge
 
-        #Algorithm to check if the point intersects, the edge, increments counter if it does
-        if (yp < y1) != (yp < y2) and xp < x1 +((yp-y1)/(y2-y1)) * (x2-x1):
+        # Algorithm to check if the point intersects the edge, increments counter if it does
+        if (yp < y1) != (yp < y2) and xp < x1 + ((yp - y1) / (y2 - y1)) * (x2 - x1):
             counter += 1
-    
-    return counter%2 == 1
+
+    return counter % 2 == 1
+
