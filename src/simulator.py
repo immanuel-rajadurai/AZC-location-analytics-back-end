@@ -48,20 +48,20 @@ def generate_random_walk_within_boundary(grid_size: int, num_steps: int, boundar
     path.append(start_position)
     return [Location(lon, lat) for lon, lat in path]
 
-def define_areas(self) -> List[Area]:
-    self.entry = Entry("Entry", [
-            Location(0, 0), Location(0, 5), Location(5, 5), Location(5, 0)], True),
-    self.exhibit_a = Exhibit("Exhibit A", [
-            Location(10, 30), Location(10, 40), Location(20, 40), Location(20, 30)], "Snake", True),
-    self.exhibit_b = Exhibit("Exhibit B", [
-            Location(0, 70), Location(0, 80), Location(10, 80), Location(10, 70)], "Lion", True),
-    self.exhibit_c = Exhibit("Exhibit C", [
-            Location(60, 50), Location(60, 60), Location(70, 60), Location(70, 50)], "Giraffe", True),
-    self.restaurant = Restaurant("Restaurant", [
-            Location(30, 70), Location(30, 80), Location(50, 80), Location(50, 70)], "Takeaway", True)
+def define_areas() -> List[Area]:
+    entry = Entry("Entry", [
+        Location(0, 0), Location(0, 5), Location(5, 5), Location(5, 0)], True)
+    exhibit_a = Exhibit("Exhibit A", [
+        Location(10, 30), Location(10, 40), Location(20, 40), Location(20, 30)], "Snake", True)
+    exhibit_b = Exhibit("Exhibit B", [
+        Location(0, 70), Location(0, 80), Location(10, 80), Location(10, 70)], "Lion", True)
+    exhibit_c = Exhibit("Exhibit C", [
+        Location(60, 50), Location(60, 60), Location(70, 60), Location(70, 50)], "Giraffe", True)
+    restaurant = Restaurant("Restaurant", [
+        Location(30, 70), Location(30, 80), Location(50, 80), Location(50, 70)], "Takeaway", True)
 
-    self.all_areas = [self.entry, self.exhibit_a, self.exhibit_b, self.exhibit_c, self.restaurant]
-    return self.all_areas
+    areas = [entry, exhibit_a, exhibit_b, exhibit_c, restaurant]
+    return areas
 
 def assign_colors(areas: List[Area]) -> dict:
     colors = ["#FF69B4", "#1E90FF", "#FFA500"]

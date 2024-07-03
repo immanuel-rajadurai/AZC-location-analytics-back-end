@@ -23,16 +23,7 @@ def simulate(areas: List[Area], gridSize: int, noSteps: int, boundaryPath: List[
 
     plot_path_with_boundary_and_areas(path, boundary_path, grid_size, areas)
 
-    #visitedAreas: List[Area] = []
     print("generated random walk")
-
-    #for loc in path:
-    #    for area in areas:
-    #        if generate_random_walk_within_boundary(gridSize, noSteps, boundaryPath):
-    #            if not visitedAreas or visitedAreas[-1].get_name() != area.get_name():
-    #                visitedAreas.append(area)
-
-
 
     stats_area = StatisticsArea(areas)
     stats_area.add_visitor_path([(loc.get_longitude(), loc.get_latitude()) for loc in path])
@@ -45,16 +36,14 @@ def simulate(areas: List[Area], gridSize: int, noSteps: int, boundaryPath: List[
     print("All exhibits:", stats_area.get_all_exhibits())
     print("Closest skipped exhibits:", [exhibit.name for exhibit in stats_area.closest_skipped_exhibits()])
 
-    #return visitedAreas
 
 print("running")
+
 # Example Usage
 boundary_path = [Location(0, 0), Location(0, 80), Location(80, 80), Location(80, 0), Location(60, 0), Location(60, 60), Location(20, 60), Location(20, 0), Location(0, 0)]
 grid_size = 100
 num_steps = 30000
-
-#path = generate_random_walk_within_boundary(grid_size, num_steps, boundary_path)
-#plot_path_with_boundary_and_areas(path, boundary_path, grid_size, areas)
+areas = define_areas()
 
 print("calling simulate")
 simulate(areas, grid_size, num_steps, boundary_path)
