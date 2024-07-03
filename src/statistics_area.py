@@ -1,17 +1,16 @@
 from typing import List, Tuple
 from collections import Counter
 from src.location import Location
-from src.area import Area, Restaurant, Exhibit, Entry
+from src.area import Exhibit, Area, Entry, Restaurant
 from src.utils import check_location_is_within_area
 from visited_area_script import determine_visited_area
 import math
 
 class StatisticsArea:
-    def __init__(self, all_areas: List[Area]):
+    def __init__(self, areas):
         # Initialize with a list of all areas in the zoo
-        self.all_areas = all_areas
+        self.all_areas = areas
         self.visited_sequences = [] # List to store the sequences of areas visited by each visitor
-        self.exhibits = []
 
     def add_visitor_path(self, path: List[Tuple[int, int]]):
         # Add a visitor's path, determining the areas visited
@@ -69,21 +68,18 @@ class StatisticsArea:
         return [item.name for item in self.all_areas if isinstance(item, Exhibit) and item.name not in revisited_exhibits]
 
     def get_all_exhibits(self):
-        print("all areas: ", self.all_areas)
-        print("areas 2: ", self.all_areas[1])
         all_exhibits = []
         for area in self.all_areas:
             if isinstance(area, Exhibit):
-                all_exhibits.append(area)
-            else:
-                print("not instance")
+                all_exhibits.append(area.name)
         return all_exhibits
 
     def closest_skipped_exhibits(self):
         exhibit_visits = self.exhibit_visits()
         visited_exhibits = set(exhibit_visits.keys())
 
-        all_exhibits = self.get_all_exhibits()
+        # Get all exhibits as Exhibit objects
+        all_exhibits = [area for area in self.all_areas if isinstance(area, Exhibit)]
         all_exhibit_names = {exhibit.name for exhibit in all_exhibits}
         skipped_exhibit_names = all_exhibit_names - visited_exhibits
 

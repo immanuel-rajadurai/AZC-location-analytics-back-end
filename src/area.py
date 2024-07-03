@@ -33,6 +33,9 @@ class Area:
   def get_geofence(self):
     return self.geofence
 
+  def get_name(self):
+    return self.name
+
 
 class Restaurant(Area):
 
@@ -52,8 +55,6 @@ class Restaurant(Area):
 
   def get_menu(self): # gets the menu of a restaurant
     return self.menu
-
-
 
 
 class Exhibit(Area):
@@ -79,7 +80,6 @@ class Exhibit(Area):
     return self.is_open
 
 
-
 class Entry(Area):
 
   def __init__(self,name,geofence,is_open):
@@ -94,9 +94,6 @@ class Entry(Area):
 
   def is_entry_open(self): # informs whether the entry is open or not
     return self.is_open
-
-  def get_name(self):
-    return self.name
 
 
 

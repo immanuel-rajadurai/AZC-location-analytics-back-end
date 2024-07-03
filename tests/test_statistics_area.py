@@ -75,8 +75,7 @@ class TestStatisticsArea(unittest.TestCase):
 
     def test_get_all_exhibits(self):
         all_exhibits = self.stats.get_all_exhibits()
-        self.assertEqual([exhibit.name for exhibit in all_exhibits],
-                         ['Exhibit A', 'Exhibit B', 'Exhibit C'])
+        self.assertEqual(all_exhibits, ["Exhibit A", "Exhibit B", "Exhibit C"])
 
     def test_closest_skipped_exhibit(self):
         path1 = [(0, 0), (30, 30), (60,60)]

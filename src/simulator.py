@@ -2,7 +2,7 @@ from typing import List, Tuple
 import random
 import matplotlib.pyplot as plt
 from src.location import Location
-from area import Area, Restaurant, Entry, Exhibit
+from src.area import Exhibit, Area, Entry, Restaurant
 
 
 # determines whether path point is inside a given polygon boundary
@@ -48,6 +48,7 @@ def generate_random_walk_within_boundary(grid_size: int, num_steps: int, boundar
     path.append(start_position)
     return [Location(lon, lat) for lon, lat in path]
 
+# Define the areas within the zoo
 def define_areas() -> List[Area]:
     entry = Entry("Entry", [
         Location(0, 0), Location(0, 5), Location(5, 5), Location(5, 0)], True)
@@ -63,6 +64,7 @@ def define_areas() -> List[Area]:
     areas = [entry, exhibit_a, exhibit_b, exhibit_c, restaurant]
     return areas
 
+# Assign colors to exhibits for visualization
 def assign_colors(areas: List[Area]) -> dict:
     colors = ["#FF69B4", "#1E90FF", "#FFA500"]
     random.shuffle(colors)
@@ -91,6 +93,7 @@ def plot_path_with_boundary_and_areas(path: List[Location], boundary_path: List[
         "Restaurant": "red"
     }
 
+    # Plot each area with its respective color
     for area in areas:
         geofence = [(loc.get_longitude(), loc.get_latitude()) for loc in area.get_geofence()]
         geofence.append(geofence[0])
@@ -103,6 +106,7 @@ def plot_path_with_boundary_and_areas(path: List[Location], boundary_path: List[
         plt.fill(x_area, y_area, color=color, alpha=1)
         plt.plot(x_area, y_area, marker='o', linestyle='-', markersize=3, color=color, label=f'Area: {area.name}')
 
+    # Configure plot limits and labels
     plt.xlim(0, grid_size)
     plt.ylim(0, grid_size)
     plt.title('Visitor Path and Zoo Areas')
