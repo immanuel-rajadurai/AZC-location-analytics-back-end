@@ -57,6 +57,8 @@ class Restaurant(Area):
     return self.menu
 
 
+
+
 class Exhibit(Area):
 
   def __init__(self,name,geofence,animal,is_open):
@@ -80,6 +82,7 @@ class Exhibit(Area):
     return self.is_open
 
 
+
 class Entry(Area):
 
   def __init__(self,name,geofence,is_open):
@@ -94,10 +97,12 @@ class Entry(Area):
 
   def is_entry_open(self): # informs whether the entry is open or not
     return self.is_open
-                  
-  
-  
+
+  def get_name(self):
+    return self.name
+
+
+
     
 
- 
-     
+
