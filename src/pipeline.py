@@ -4,8 +4,10 @@ from location import Location
 from simulator import generate_random_walk_within_boundary, define_areas, plot_path_with_boundary_and_areas
 from typing import List
 from src.statistics_area import StatisticsArea
+from recurrentNeuralNetwork import loadRNN, predictNextArea
+import tensorflow as tf
 
-def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location]) -> List[Area]:
+def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location], modelpath: str) -> List[Area]:
     """
     Simulates a random walk within a given boundary and tracks visited areas.
     
@@ -28,6 +30,9 @@ def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location]) -
     # Convert path to tuples of (longitude, latitude) and add it to stats_area
     stats_area.add_visitor_path([(loc.get_longitude(), loc.get_latitude()) for loc in path])
 
+    # Load the rnn to make predictions
+    model = tf.keras.models.load_model(modelpath)
+
     # Print statistics about the walk and visited areas
     print("Statistics:")
     print(" - Most visited area:", stats_area.most_visited_area())
@@ -36,6 +41,7 @@ def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location]) -
     print(" - Revisited exhibits:", stats_area.revisited_exhibits())
     print(" - Not revisited exhibits:", stats_area.not_revisited_exhibits())
     print(" - Closest skipped exhibits:", [exhibit.name for exhibit in stats_area.closest_skipped_exhibits()])
+    print(" - The next area the user will visit will be: " + predictNextArea(path, model))
 
 
 # Example Usage
