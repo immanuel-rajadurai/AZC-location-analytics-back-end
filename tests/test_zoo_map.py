@@ -1,5 +1,5 @@
 import unittest
-from zoo_map import ZooMap
+from src.zoo_map import ZooMap
 
 """
 This file contains test cases for the ZooMap class.

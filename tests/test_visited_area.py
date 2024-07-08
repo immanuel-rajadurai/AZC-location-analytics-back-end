@@ -1,7 +1,7 @@
 import unittest
 from src.location import Location
 from src.area import Area, Restaurant, Exhibit, Entry
-from zooscript import generate_random_walk
+#from zooscript import generate_random_walk_within_boundary
 from visited_area_script import determine_visited_area
 
 class TestDetermineVisitedAreas(unittest.TestCase):
@@ -44,7 +44,7 @@ class TestDetermineVisitedAreas(unittest.TestCase):
 
     def test_path_visits_multiple_areas(self):
         # Test a path that enters multiple areas
-        path = [(0, 0), (10, 10), (15, 15), (40, 40), (45, 45), (60, 60), (63, 68)]
+        path = [(0, 0), (10, 10), (15, 15), (40, 40), (45, 45), (63, 64), (64, 65)]
         visited_areas = determine_visited_area(path, self.areas)
         self.assertIn("La Brasserie", visited_areas)
         self.assertIn("Giraffe Exhibit", visited_areas)
@@ -58,13 +58,13 @@ class TestDetermineVisitedAreas(unittest.TestCase):
 
     def test_path_visits_all_areas_reverse(self):
         # Test a path that visits all areas in reverse order
-        path = [(63, 68), (60, 60), (45, 45), (40, 40), (15, 15), (10, 10)]
+        path = [(63, 64), (64, 65), (45, 45), (40, 40), (15, 15), (10, 10)]
         visited_areas = determine_visited_area(path, self.areas)
         self.assertEqual(visited_areas, ["Snake Exhibit", "Giraffe Exhibit", "La Brasserie"])
 
     def test_path_visits_areas_twice(self):
         # Test a path that visits some areas twice
-        path = [(63, 68), (60, 60), (45, 45), (40, 40), (15, 15), (10, 10), (45,45), (40, 40)]
+        path = [(63, 64), (64, 65), (45, 45), (40, 40), (15, 15), (10, 10), (45,45), (40, 40)]
         visited_areas = determine_visited_area(path, self.areas)
         self.assertEqual(visited_areas, ["Snake Exhibit", "Giraffe Exhibit", "La Brasserie", "Giraffe Exhibit"])
 

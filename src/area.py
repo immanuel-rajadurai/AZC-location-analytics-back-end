@@ -36,6 +36,9 @@ class Area:
   def get_name(self):
     return self.name
 
+  def get_name(self):
+    return self.name
+
 
 class Restaurant(Area):
 
@@ -94,10 +97,9 @@ class Entry(Area):
 
   def is_entry_open(self): # informs whether the entry is open or not
     return self.is_open
-                  
-  
-  
+
+
+
     
 
- 
-     
+

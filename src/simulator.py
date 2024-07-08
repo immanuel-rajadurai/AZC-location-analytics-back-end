@@ -1,8 +1,8 @@
 from typing import List, Tuple
 import random
 import matplotlib.pyplot as plt
-from location import Location
-from area import Area
+from src.location import Location
+from src.area import Exhibit, Area, Entry, Restaurant
 
 
 # determines whether path point is inside a given polygon boundary
@@ -48,33 +48,78 @@ def generate_random_walk_within_boundary(grid_size: int, num_steps: int, boundar
     path.append(start_position)
     return [Location(lon, lat) for lon, lat in path]
 
+# Define the areas within the zoo
+def define_areas() -> List[Area]:
+    entry = Entry("Entry", [
+        Location(0, 0), Location(0, 5), Location(5, 5), Location(5, 0)], True)
+    exhibit_a = Exhibit("Exhibit A", [
+        Location(10, 30), Location(10, 40), Location(20, 40), Location(20, 30)], "Snake", True)
+    exhibit_b = Exhibit("Exhibit B", [
+        Location(0, 70), Location(0, 80), Location(10, 80), Location(10, 70)], "Lion", True)
+    exhibit_c = Exhibit("Exhibit C", [
+        Location(60, 50), Location(60, 60), Location(70, 60), Location(70, 50)], "Giraffe", True)
+    restaurant = Restaurant("Restaurant", [
+        Location(30, 70), Location(30, 80), Location(50, 80), Location(50, 70)], "Takeaway", True)
+
+    areas = [entry, exhibit_a, exhibit_b, exhibit_c, restaurant]
+    return areas
+
+# Assign colors to exhibits for visualization
+def assign_colors(areas: List[Area]) -> dict:
+    colors = ["#FF69B4", "#1E90FF", "#FFA500"]
+    random.shuffle(colors)
+    color_dict = {}
+    for area in areas:
+        if isinstance(area, Exhibit):
+            color_dict[area.name] = colors.pop()
+    return color_dict
 
 # plots path within a given boundary
-def plot_path_with_boundary(path: List[Location], boundary_path: List[Location], grid_size: int):
+def plot_path_with_boundary_and_areas(path: List[Location], boundary_path: List[Location], grid_size: int, areas: List[Area]):
+    plt.figure(figsize=(12, 10))
+
     x, y = zip(*[(loc.get_longitude(), loc.get_latitude()) for loc in path])
     bx, by = zip(*[(loc.get_longitude(), loc.get_latitude()) for loc in boundary_path])
 
-    plt.figure(figsize=(10, 10))
-
-    plt.plot(x, y, marker='o', linestyle='-', color='blue', markersize=3, label='Path')
-    plt.plot([x[-2], x[-1]], [y[-2], y[-1]], 'r--', linewidth=2, label='Return to Start')
+    plt.plot(x, y, marker='o', linestyle='-', color='gray', markersize=2, label='Path', alpha=0.3)
+    plt.plot([x[-2], x[-1]], [y[-2], y[-1]], linewidth=2,color='purple', label='Return to Start', alpha=0.3)
     plt.plot(x[0], y[0], 'go', markersize=10, label='Start/End Point')
     plt.plot(bx, by, 'k-', linewidth=2, label='Boundary Path')
 
+    exhibit_colors = assign_colors(areas)
+
+    area_colors = {
+        "Entry": "darkgreen",
+        "Restaurant": "red"
+    }
+
+    # Plot each area with its respective color
+    for area in areas:
+        geofence = [(loc.get_longitude(), loc.get_latitude()) for loc in area.get_geofence()]
+        geofence.append(geofence[0])
+        x_area, y_area = zip(*geofence)
+        area_type = type(area).__name__
+        if isinstance(area, Exhibit):
+            color = exhibit_colors[area.name]
+        else:
+            color = area_colors.get(type(area).__name__, "black")
+        plt.fill(x_area, y_area, color=color, alpha=1)
+        plt.plot(x_area, y_area, marker='o', linestyle='-', markersize=3, color=color, label=f'Area: {area.name}')
+
+    # Configure plot limits and labels
     plt.xlim(0, grid_size)
     plt.ylim(0, grid_size)
-    plt.title('Random Zoo Walk Path Within Boundary')
+    plt.title('Visitor Path and Zoo Areas')
     plt.xlabel('Longitude')
     plt.ylabel('Latitude')
     plt.grid(True)
-    plt.legend()
+    plt.subplots_adjust(right=0.75)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+
     plt.show()
 
 
-# Example Usage
-boundary_path = [Location(0, 0), Location(0, 80), Location(80, 80), Location(80, 0), Location(60, 0), Location(60, 60), Location(20, 60), Location(20, 0), Location(0, 0)]
-grid_size = 100
-num_steps = 30000
 
-path = generate_random_walk_within_boundary(grid_size, num_steps, boundary_path)
-plot_path_with_boundary(path, boundary_path, grid_size)
+
+
+

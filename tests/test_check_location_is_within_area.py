@@ -10,9 +10,9 @@ check_location_is_within_area runs in O(n) time, and passes 6/6 test cases
 """
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from utils import check_location_is_within_area
-from location import Location
-from area import Area
+from src.utils import check_location_is_within_area
+from src.location import Location
+from src.area import Area
 
 class TestRayCasting(unittest.TestCase):
     # General test cases
