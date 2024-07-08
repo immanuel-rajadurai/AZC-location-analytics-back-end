@@ -7,7 +7,7 @@ from src.statistics_area import StatisticsArea
 from recurrentNeuralNetwork import loadRNN, predictNextArea
 import tensorflow as tf
 
-def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location], modelpath: str) -> List[Area]:
+def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location], model) -> List[Area]:
     """
     Simulates a random walk within a given boundary and tracks visited areas.
     
@@ -30,9 +30,6 @@ def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location], m
     # Convert path to tuples of (longitude, latitude) and add it to stats_area
     stats_area.add_visitor_path([(loc.get_longitude(), loc.get_latitude()) for loc in path])
 
-    # Load the rnn to make predictions
-    model = tf.keras.models.load_model(modelpath)
-
     # Print statistics about the walk and visited areas
     print("Statistics:")
     print(" - Most visited area:", stats_area.most_visited_area())
@@ -48,5 +45,6 @@ def simulate(areas, gridSize: int, noSteps: int, boundaryPath: List[Location], m
 boundary_path = [Location(0, 0), Location(0, 80), Location(80, 80), Location(80, 0), Location(60, 0), Location(60, 60), Location(20, 60), Location(20, 0), Location(0, 0)]
 grid_size = 100
 num_steps = 30000
+model = tf.keras.models.load_model('model.h5')
 areas = define_areas()
 simulate(areas, grid_size, num_steps, boundary_path)

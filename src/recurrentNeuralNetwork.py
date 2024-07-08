@@ -7,7 +7,9 @@ from tensorflow.keras.layers import Embedding, LSTM, Dense
 from area import Area
 from typing import List
 
-def trainRNN(sequences: List[List[str]], filename: str, rnnUnits: int = 128, embeddingDim: int = 50,):
+#Enter a list of paths to train the RNN
+#Optionally edit the rnnUnits of embeddingdim, else it will use the default values
+def trainRNN(sequences: List[List[str]], rnnUnits: int = 128, embeddingDim: int = 50,):
 
     areas = [location for seq in sequences for location in seq] #List of unique areas
 
@@ -36,8 +38,9 @@ def trainRNN(sequences: List[List[str]], filename: str, rnnUnits: int = 128, emb
 
     model.fit(x_padded, y, epochs=10, batch_size=32, validation_split=0.2)
 
+    #Saves the model in a file called model.h5 to access afterwards
     currentDirectory = os.getcwd()
-    modelPath = os.path.join(currentDirectory, filename + '.h5')
+    modelPath = os.path.join(currentDirectory, 'model.h5')
     model.save(modelPath)
 
 def summariseModel(model):
