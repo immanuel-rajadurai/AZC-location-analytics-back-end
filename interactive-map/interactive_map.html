@@ -116,7 +116,7 @@
 
       const map = new maplibregl.Map({
         container: "map",
-        center: [-0.1536, 51.5353], 
+        center: [-0.1536, 51.5353], // London Zoo coordinates
         zoom: 16,
         style: "https://maps.geo.us-east-1.amazonaws.com/maps/v0/maps/esri-navigation/style-descriptor",
         hash: true,
@@ -131,16 +131,82 @@
 
       map.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
-      const popup = new maplibregl.Popup({ offset: 35 }).setHTML(
-        `<h3>London Zoo</h3>
-        <p>Regent's Park, London NW1 4RY, UK</p>
-        <img src="entrance-to-zsl-london-zoo-regents-park-city-of-westminster-greater-london-england-united-kingdom-2G54PE3.jpg" width="200" />`
-      );
+      const exhibits = [
+        {
+          coordinates: [-0.1536, 51.5353],
+          title: "London Zoo",
+          description: "Regent's Park, London NW1 4RY, UK",
+          image: "entrance-to-zsl-london-zoo-regents-park-city-of-westminster-greater-london-england-united-kingdom-2G54PE3.jpg"
+        },
+        {
+          coordinates: [-0.1526931, 51.535456],
+          title: "Penguin Beach",
+          description: "Come and see our penguins!",
+          image: "penguin-beach.jpg"
+        },
+        {
+          coordinates: [-0.152, 51.536],
+          title: "Gorilla Kingdom",
+          description: "Visit the majestic gorillas!",
+          image: "gorilla-kingdom.jpg"
+        },
+        {
+          coordinates: [-0.1555829, 51.5351591],
+          title: "Reptile House",
+          description: "Home to a variety of reptiles.",
+          image: "reptile-house.jpg"
+        }
+      ];
 
-      const marker = new maplibregl.Marker()
-        .setLngLat([-0.1536, 51.5353])
-        .setPopup(popup)
-        .addTo(map);
+      exhibits.forEach(exhibit => {
+        const popup = new maplibregl.Popup({ offset: 35 }).setHTML(
+          `<h3>${exhibit.title}</h3>
+          <p>${exhibit.description}</p>
+          <img src="${exhibit.image}" width="200" />`
+        );
+
+        new maplibregl.Marker()
+          .setLngLat(exhibit.coordinates)
+          .setPopup(popup)
+          .addTo(map);
+      });
+
+      function haversineDistance(coords1, coords2) {
+        function toRad(x) {
+          return x * Math.PI / 180;
+        }
+
+        const lat1 = coords1[1];
+        const lon1 = coords1[0];
+        const lat2 = coords2[1];
+        const lon2 = coords2[0];
+
+        const R = 6371; 
+        const x1 = lat2 - lat1;
+        const dLat = toRad(x1);
+        const x2 = lon2 - lon1;
+        const dLon = toRad(x2);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      function checkProximity(clickCoords) {
+        const radius = 0.05; // Approx. 50 meters
+        exhibits.forEach(exhibit => {
+          const distance = haversineDistance(clickCoords, exhibit.coordinates);
+          if (distance < radius) {
+            alert(`You have entered the ${exhibit.title} area!`);
+          }
+        });
+      }
+
+      map.on('click', (e) => {
+        const clickCoords = [e.lngLat.lng, e.lngLat.lat];
+        checkProximity(clickCoords);
+      });
 
       document.querySelector(".map-style.esri-navigation")
         .addEventListener("click", function (event) {
@@ -168,3 +234,4 @@
   </script>
 </body>
 </html>
+
